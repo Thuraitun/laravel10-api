@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreTaskRequest;
-use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
 use Illuminate\Http\Request;
-use App\Http\Resources\TaskCollection;
 use App\Http\Resources\TaskResource;
+use Illuminate\Support\Facades\Auth;
 use Spatie\QueryBuilder\QueryBuilder;
+use App\Http\Resources\TaskCollection;
+use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\UpdateTaskRequest;
 
 class TaskController extends Controller
 {
@@ -31,7 +32,7 @@ class TaskController extends Controller
     public function store(StoreTaskRequest $request)
     {
         $validated = $request->validated();
-        $task = Task::create($validated);
+        $task = Auth::user()->tasks()->create($validated);
 
         return new TaskResource($task);
     }
